@@ -11,9 +11,8 @@ def wordPattern(pattern: str, txt: str):
     
     for i in range(len(pattern)):
         
-        if pattern[i] in hash_map:
-            if hash_map[pattern[i]] != txt_list[i]:
-                return False
+        if pattern[i] in hash_map and hash_map[pattern[i]] != txt_list[i]:
+            return False
         else:
             hash_map[pattern[i]] = txt_list[i]
                 
@@ -26,7 +25,7 @@ def wordPattern2(pattern: str, txt_list: str):
 
 if __name__ == '__main__':
     
-    if wordPattern("abba","dog cat cat dog"):
+    if wordPattern("abba","dog cat cat dog2"):
         print("Is a valid pattern")
     else:
         print("Is not a valid pattern")    
