@@ -32,6 +32,18 @@ class DoubleLinkedList:
               
         return self    
     
+    def remove(self, node):
+        
+        if node is None: 
+            return
+            
+        if node.prev is not None:
+            node.prev.next = node.next
+            
+        if node.next is not None:
+            node.next.prev = node.prev    
+            
+            
     def removeAt(self, index):
         
         if index < 0:

@@ -47,8 +47,8 @@ class LinkedList:
             
         return depth
             
-        
-        
+    
+            
     def removeAt(self, index):
         depth = 1
         node = self.head

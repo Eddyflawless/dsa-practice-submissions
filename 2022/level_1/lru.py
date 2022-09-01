@@ -18,20 +18,34 @@ class LRUCache:
         self.cap = capacity
         self.cache = {}
         
+        self.lruPtr.next = self.mruPtr
+        self.mruPtr.prev = self.lruPtr
+        
     #remove node from list    
     def remove(self, node):
-        prev = node.prev
-        next = node.next
         
-        # prev.next = next   
-        # next.prev = prev
-    
+        if node is None:
+            return
+        
+        prev, next = node.next, node.prev
+        
+        if prev:
+            prev.next = node.next
+        
+        if next:
+            next.prev = node.prev    
+
+        
     def insert(self, node):
+        
+        if node is None:
+            return
+        
         prev = self.mruPtr.prev         
         node.next = self.mruPtr
         node.prev = prev
-        print("-->", prev)
-        #prev.next = node
+        prev.next = node
+        self.mruPtr.prev = node
      
     def get(self, key):
         
@@ -42,22 +56,29 @@ class LRUCache:
         return -1
     
     def put(self, key, value):
+        
         if key in self.cache:
             self.remove(self.cache[key])
-        self.cache[key] = Node(key, value)
-        self.insert(self.cache[key])
+            
+        self.cache[key] = Node(key, value) #key points to memory location
+        self.insert(self.cache[key]) 
         
         if len(self.cache) > self.cap:
             lru = self.lruPtr.next
             self.remove(lru)
+            print("delete key: ", lru.key)
             del self.cache[lru.key]
                     
             
 def runQueryOperation(arg, lruCache):
     ops = arg[0]
     if ops == 2:
+        if len(arg) != 2: #ignores operations, list, not having the required number of arguments
+            return
         lruCache.get(arg[1])
     elif ops == 1:
+        if len(arg) != 3:
+            return
         lruCache.put(arg[1], arg[2])    
         
          
@@ -113,6 +134,19 @@ if __name__ == '__main__':
     for query in queries:
         runQueryOperation(query, lruCache)
         
-        
+    # get operations    
     print("get key: of 2", lruCache.get(2) )
     print("get key of 4", lruCache.get(4) )    
+    
+    # put operations
+    print("put key: of 3", lruCache.put(3, 15) )
+    print("put key of 7", lruCache.put(7,21) )    
+    print("put key of 31", lruCache.put(31,1201) ) 
+    
+    # get operations
+    print("get key: of 3", lruCache.get(3) )
+    print("get key of 7", lruCache.get(7) )    
+    print("get key of 31", lruCache.get(31) ) 
+    
+    print("-->", len(lruCache.cache))
+    
